@@ -1,0 +1,14 @@
+{
+  "navigationFallback": {
+    "rewrite": "/index.html",
+    "exclude": ["/images/*.{png,jpg,gif,svg}", "/css/*", "/js/*", "/api/*"]
+  },
+  "globalHeaders": {
+    "X-Content-Type-Options": "nosniff",
+    "X-Frame-Options": "DENY",
+    "Content-Security-Policy": "default-src 'self' 'unsafe-inline' https://photon.komoot.io https://router.project-osrm.org https://*.tile.openstreetmap.org https://unpkg.com data:;"
+  },
+  "mimeTypes": {
+    ".json": "text/json"
+  }
+}
