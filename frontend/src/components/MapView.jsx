@@ -76,22 +76,22 @@ const createCustomIcon = (type, customLabel = null) => {
 const startIcon = createCustomIcon('start', 'A');
 const endIcon = createCustomIcon('end', 'B');
 
-// Tile layers configurations
+// Tile layers configurations (Free, open-access, zero API key required)
 const TILE_PROVIDERS = {
   osm: {
-    name: 'OpenStreetMap',
+    name: 'OpenStreetMap (Standard)',
     url: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
-    attribution: '&copy; OpenStreetMap contributors'
-  },
-  dark: {
-    name: 'CartoDB Dark',
-    url: 'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png',
-    attribution: '&copy; CartoDB &copy; OpenStreetMap'
+    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
   },
   esri: {
-    name: 'Esri Street',
+    name: 'Esri World Street',
     url: 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}',
-    attribution: '&copy; Esri & OpenStreetMap'
+    attribution: '&copy; Esri, HERE, Garmin, USGS, NGA & OpenStreetMap'
+  },
+  topo: {
+    name: 'OpenTopoMap',
+    url: 'https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png',
+    attribution: '&copy; OpenTopoMap contributors'
   }
 };
 
@@ -104,7 +104,7 @@ export default function MapView({
   focusPoint = null,
   onSelectRoute 
 }) {
-  const [activeTileKey, setActiveTileKey] = useState('dark');
+  const [activeTileKey, setActiveTileKey] = useState('osm');
   const [showTileMenu, setShowTileMenu] = useState(false);
 
   // Default center: India (Bengaluru)
@@ -125,7 +125,7 @@ export default function MapView({
     center = validPoints[0];
   }
 
-  const activeTile = TILE_PROVIDERS[activeTileKey] || TILE_PROVIDERS.dark;
+  const activeTile = TILE_PROVIDERS[activeTileKey] || TILE_PROVIDERS.osm;
 
   return (
     <div className="w-full h-full min-h-[440px] rounded-2xl overflow-hidden border border-navy-700/80 bg-navy-900 shadow-2xl relative">
