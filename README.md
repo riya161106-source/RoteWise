@@ -19,15 +19,19 @@
 ### Key Capabilities
 - **Real Driving Routes**: Powered by OpenStreetMap and OSRM (Open Source Routing Machine) driving engine.
 - **Multi-Route Alternatives**: Automatically fetches alternative routes without fabrication.
-- **Dynamic Fuel Economics**: Computes fuel consumption in litres and total cost in ₹ based on individual vehicle mileage and current petrol/diesel prices:
-  $$\text{Fuel Required (L)} = \frac{\text{Distance (km)}}{\text{Vehicle Mileage (km/L)}}$$
-  $$\text{Estimated Fuel Cost (₹)} = \text{Fuel Required} \times \text{Fuel Price per Litre}$$
+- **AI/ML Predictive Fuel & Traffic Engine**: Evaluates road hierarchy, turn densities, and time-of-day traffic congestion ($C_t$) peak multipliers (+18% morning, +22% evening).
+- **Carbon Footprint (CO₂) & Eco-Routing**: Computes greenhouse emissions (IPCC factors: 2.31 kg CO₂/L Petrol, 2.68 kg CO₂/L Diesel) with equivalent tree offset absorption metrics.
 - **Multi-Criteria Recommendations**:
   - ⚡ **Fastest Route** – Minimized travel time.
   - 📏 **Shortest Route** – Minimized driving distance.
   - 💰 **Cheapest Route** – Minimized estimated fuel expense.
+  - 🌿 **Eco-Friendly Route** – Minimized carbon footprint (lowest CO₂ emissions).
   - 🏆 **Recommended Route** – Optimal multi-criteria balance.
-- **Interactive Leaflet Map**: Custom markers, glowing emerald polyline for active routes, dashed lines for alternatives, and auto-zoom bounds.
+- **Turn-by-Turn Step Navigation**: Interactive maneuver drawer with direction icons (turns, roundabouts, forks) and click-to-focus on the Leaflet map.
+- **Multi-Stop Waypoints**: Support for intermediate via points (Origin $\to$ Stop 1 $\to$ Destination).
+- **Interactive Leaflet Map**: Custom SVG markers, map tile style switcher (CartoDB Dark Matter, OSM Standard, Esri Street), and auto-fitBounds.
+- **Live DBMS Query Inspector**: In-app SQL runner allowing university evaluators to execute live 3NF queries, 3-way JOINs, and aggregates with real-time execution telemetry.
+- **Printable Trip Itinerary**: Formatted one-click print/export view for travelers.
 - **Persistent MySQL Storage**: User authentication, search history logging, route recalculation, and travel dashboard analytics.
 
 ---
