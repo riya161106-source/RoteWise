@@ -9,6 +9,7 @@ router.use(verifyToken);
 // User search history CRUD & Analytics
 router.get('/', historyController.getHistory);
 router.get('/analytics/stats', historyController.getAnalytics);
+router.get('/query-inspector', historyController.runQueryInspector);
 router.post('/:searchId/recalculate', historyController.recalculateRoute);
 router.delete('/:searchId', historyController.deleteHistory);
 

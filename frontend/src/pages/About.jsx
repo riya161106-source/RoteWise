@@ -5,13 +5,16 @@ import {
   Cloud, 
   ShieldCheck, 
   Layers, 
-  GitBranch, 
+  Leaf, 
   Server, 
-  Lock, 
+  Clock, 
   Code,
   CheckCircle2,
-  Terminal
+  Terminal,
+  BrainCircuit,
+  Navigation
 } from 'lucide-react';
+import DBMSQueryInspector from '../components/DBMSQueryInspector';
 
 export default function About() {
   return (
@@ -21,15 +24,56 @@ export default function About() {
       <div className="text-center max-w-3xl mx-auto space-y-3">
         <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-xs font-semibold">
           <Layers className="w-3.5 h-3.5" />
-          Academic Subject Integration Report
+          Academic Capstone Engineering Report
         </div>
         <h1 className="text-3xl sm:text-5xl font-extrabold text-white tracking-tight">
           RouteWise Architecture & Engineering
         </h1>
         <p className="text-sm sm:text-base text-slate-300">
-          A comprehensive demonstration of System Design, DBMS, Azure Cloud Computing, and Cyber Security principles in a real full-stack web application.
+          A comprehensive, production-grade integration of AI & ML Predictive Optimization, System Design, DBMS, Azure Cloud Computing, and Cyber Security.
         </p>
       </div>
+
+      {/* Special Module: AI & ML Predictive Optimization Engine */}
+      <section className="bg-navy-900 border border-emerald-500/30 rounded-2xl p-6 sm:p-8 shadow-2xl space-y-6">
+        <div className="flex items-center gap-3 pb-4 border-b border-navy-800">
+          <div className="p-2.5 rounded-xl bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
+            <BrainCircuit className="w-6 h-6" />
+          </div>
+          <div>
+            <h2 className="text-xl font-bold text-white flex items-center gap-2">
+              AI & ML Optimization & Carbon Emissions (CO₂)
+              <span className="text-[10px] font-bold px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 uppercase tracking-wider">
+                BTech AI & ML Core
+              </span>
+            </h2>
+            <p className="text-xs text-slate-400">Time-of-day traffic models, road complexity weighting, and IPCC carbon footprints</p>
+          </div>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div className="p-4 rounded-xl bg-navy-950/70 border border-navy-800 space-y-2">
+            <span className="text-xs font-bold text-emerald-400 uppercase tracking-wider block">1. Time-of-Day Traffic Model (Ct)</span>
+            <p className="text-xs text-slate-300 leading-relaxed">
+              Dynamically evaluates departure hours: Peak morning (8–10 AM: +18% idling fuel penalty), Peak evening (5–8 PM: +22% penalty), and Off-peak cruising (-5% efficiency).
+            </p>
+          </div>
+
+          <div className="p-4 rounded-xl bg-navy-950/70 border border-navy-800 space-y-2">
+            <span className="text-xs font-bold text-teal-400 uppercase tracking-wider block">2. Carbon Footprint (CO2) Metric</span>
+            <p className="text-xs text-slate-300 leading-relaxed">
+              Calculates greenhouse emissions based on IPCC standards (Petrol: 2.31 kg CO₂/L, Diesel: 2.68 kg CO₂/L) and awards an exclusive 🌿 <strong>ECO-FRIENDLY</strong> badge.
+            </p>
+          </div>
+
+          <div className="p-4 rounded-xl bg-navy-950/70 border border-navy-800 space-y-2">
+            <span className="text-xs font-bold text-sky-400 uppercase tracking-wider block">3. Multi-Objective Decision Matrix</span>
+            <p className="text-xs text-slate-300 leading-relaxed">
+              Weights travel duration (50%), vehicle fuel economics (30%), and carbon emission footprint (20%) to recommend the optimal route.
+            </p>
+          </div>
+        </div>
+      </section>
 
       {/* Subject 1: System Design */}
       <section className="bg-navy-900 border border-navy-700/80 rounded-2xl p-6 sm:p-8 shadow-xl space-y-6">
@@ -47,7 +91,7 @@ export default function About() {
           <div className="p-4 rounded-xl bg-navy-950/70 border border-navy-800 space-y-2">
             <span className="text-xs font-bold text-indigo-400 uppercase tracking-wider block">1. Presentation Layer</span>
             <p className="text-xs text-slate-300 leading-relaxed">
-              React 18 Single Page Application (SPA) styled with Tailwind CSS in Dark Navy & Emerald Green. Uses Leaflet & React-Leaflet for interactive map tile and polyline rendering.
+              React 18 Single Page Application (SPA) styled with Tailwind CSS in Dark Navy & Emerald Green. Uses Leaflet & React-Leaflet with tile style switching and Turn-by-Turn guidance.
             </p>
           </div>
 
@@ -88,7 +132,7 @@ export default function About() {
         </div>
       </section>
 
-      {/* Subject 2: DBMS */}
+      {/* Subject 2: DBMS with Live Inspector */}
       <section className="bg-navy-900 border border-navy-700/80 rounded-2xl p-6 sm:p-8 shadow-xl space-y-6">
         <div className="flex items-center gap-3 pb-4 border-b border-navy-800">
           <div className="p-2 rounded-xl bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
@@ -120,6 +164,11 @@ export default function About() {
               <li>• <strong>Index Strategy:</strong> B-Tree indexes on <code className="text-emerald-400">users(email)</code> and <code className="text-emerald-400">search_history(user_id, search_date)</code>.</li>
             </ul>
           </div>
+        </div>
+
+        {/* Embedded Query Inspector */}
+        <div className="pt-2">
+          <DBMSQueryInspector />
         </div>
       </section>
 

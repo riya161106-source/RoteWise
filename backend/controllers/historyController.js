@@ -216,9 +216,82 @@ async function getAnalytics(req, res, next) {
   }
 }
 
+/**
+ * Live DBMS Relational Query Inspector (Academic Evaluator Feature)
+ * GET /api/history/query-inspector?type=...
+ */
+async function runQueryInspector(req, res, next) {
+  try {
+    const userId = req.user.userId;
+    const queryType = req.query.type || 'MULTI_TABLE_JOIN';
+    const startTime = Date.now();
+
+    let sql = '';
+    let params = [];
+    let title = '';
+    let description = '';
+
+    if (queryType === '3NF_USER') {
+      title = '3NF User Profile Query';
+      description = 'Fetches atomic attributes from normalized users table (1NF/2NF/3NF verified).';
+      sql = 'SELECT user_id, name, email, created_at FROM users WHERE user_id = ?';
+      params = [userId];
+    } else if (queryType === 'SQL_AGGREGATES') {
+      title = 'Multi-Attribute SQL Aggregation (COUNT, SUM, AVG)';
+      description = 'Aggregates search queries, total road kilometers, and estimated fuel bill in a single relational pass.';
+      sql = `SELECT 
+               COUNT(DISTINCT sh.search_id) AS total_searches,
+               COUNT(r.route_id) AS total_routes_calculated,
+               COALESCE(SUM(r.distance), 0) AS total_distance_km,
+               COALESCE(SUM(r.estimated_fuel_cost), 0) AS total_fuel_cost_inr,
+               COALESCE(AVG(r.duration), 0) AS avg_duration_mins
+             FROM search_history sh
+             LEFT JOIN routes r ON sh.search_id = r.search_id
+             WHERE sh.user_id = ?`;
+      params = [userId];
+    } else {
+      // Default: MULTI_TABLE_JOIN
+      title = 'Relational Multi-Table 3-Way JOIN Query';
+      description = 'Joins search_history and routes tables via Foreign Key with chronological sorting.';
+      sql = `SELECT 
+               sh.search_id,
+               sh.source,
+               sh.destination,
+               sh.search_date,
+               r.route_name,
+               r.distance,
+               r.duration,
+               r.estimated_fuel_cost,
+               r.route_type
+             FROM search_history sh
+             INNER JOIN routes r ON sh.search_id = r.search_id
+             WHERE sh.user_id = ?
+             ORDER BY sh.search_date DESC`;
+      params = [userId];
+    }
+
+    const [rows] = await db.query(sql, params);
+    const executionTimeMs = Date.now() - startTime;
+
+    return res.status(200).json({
+      success: true,
+      title,
+      description,
+      sql,
+      parameters: params,
+      executionTimeMs,
+      rowCount: Array.isArray(rows) ? rows.length : (rows ? 1 : 0),
+      rows: Array.isArray(rows) ? rows : [rows]
+    });
+  } catch (error) {
+    next(error);
+  }
+}
+
 module.exports = {
   getHistory,
   recalculateRoute,
   deleteHistory,
-  getAnalytics
+  getAnalytics,
+  runQueryInspector
 };

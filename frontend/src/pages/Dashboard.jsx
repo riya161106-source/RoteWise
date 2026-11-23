@@ -7,14 +7,17 @@ import {
   IndianRupee, 
   Clock, 
   Fuel, 
-  TrendingUp, 
+  Leaf, 
   ArrowRight,
   Database,
   Loader2,
-  Calendar
+  Calendar,
+  ShieldCheck,
+  Cloud
 } from 'lucide-react';
 import api from '../services/api';
 import { useAuth } from '../context/AuthContext';
+import DBMSQueryInspector from '../components/DBMSQueryInspector';
 
 export default function Dashboard() {
   const { user, fuelSettings } = useAuth();
@@ -47,21 +50,26 @@ export default function Dashboard() {
     loadDashboard();
   }, []);
 
+  // Compute estimated carbon emission total (approx 2.31 kg CO2 per litre of petrol)
+  const estTotalCO2 = stats?.totalFuelCostInr && fuelSettings?.fuel_price 
+    ? parseFloat(((stats.totalFuelCostInr / fuelSettings.fuel_price) * 2.31).toFixed(1))
+    : 0;
+
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
       
       {/* Welcome Banner */}
-      <div className="bg-gradient-to-r from-navy-900 via-navy-850 to-navy-900 border border-navy-700/80 rounded-2xl p-6 sm:p-8 shadow-xl flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
+      <div className="bg-gradient-to-r from-navy-900 via-navy-850 to-navy-900 border border-navy-700/80 rounded-2xl p-6 sm:p-8 shadow-xl flex flex-col md:flex-row items-start md:items-center justify-between gap-6 text-left">
         <div>
           <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-xs font-semibold mb-3">
             <LayoutDashboard className="w-3.5 h-3.5" />
-            Travel Intelligence Center
+            Travel & Vehicle Economics Center
           </div>
           <h1 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">
             Welcome back, {user?.name || 'Explorer'}!
           </h1>
           <p className="text-xs sm:text-sm text-slate-300 mt-1 max-w-xl">
-            Here is your live route planning analytics, database telemetry, and vehicle fuel economics profile.
+            Live route planning analytics, relational database telemetry, AI fuel predictions, and carbon footprints.
           </p>
         </div>
 
@@ -82,7 +90,7 @@ export default function Dashboard() {
             <Database className="w-4 h-4 text-emerald-400" />
             Relational Aggregate Metrics (SQL COUNT, SUM, AVG)
           </h2>
-          <span className="text-[11px] text-slate-400 font-mono">Live DBMS Query</span>
+          <span className="text-[11px] text-slate-500 font-mono">Live Relational Execution</span>
         </div>
 
         {loading ? (
@@ -90,59 +98,72 @@ export default function Dashboard() {
             <Loader2 className="w-6 h-6 text-emerald-400 animate-spin" />
           </div>
         ) : (
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-            
+          <div className="grid grid-cols-2 lg:grid-cols-5 gap-3.5">
             {/* Total Searches */}
-            <div className="p-5 rounded-2xl bg-navy-900 border border-navy-700/80 shadow-md text-left">
+            <div className="p-4 sm:p-5 rounded-2xl bg-navy-900 border border-navy-700/80 shadow-md text-left">
               <span className="text-xs text-slate-400 flex items-center gap-1.5 mb-2">
                 <Search className="w-4 h-4 text-emerald-400" />
-                Total Searches
+                Searches
               </span>
               <p className="text-2xl sm:text-3xl font-extrabold text-white">
                 {stats?.totalSearches || 0}
               </p>
-              <p className="text-[11px] text-slate-400 mt-1">Queries recorded</p>
+              <p className="text-[11px] text-slate-500 mt-1">Queries recorded</p>
             </div>
 
             {/* Total Distance */}
-            <div className="p-5 rounded-2xl bg-navy-900 border border-navy-700/80 shadow-md text-left">
+            <div className="p-4 sm:p-5 rounded-2xl bg-navy-900 border border-navy-700/80 shadow-md text-left">
               <span className="text-xs text-slate-400 flex items-center gap-1.5 mb-2">
                 <Navigation className="w-4 h-4 text-sky-400" />
-                Distance Computed
+                Total Distance
               </span>
               <p className="text-2xl sm:text-3xl font-extrabold text-white">
                 {stats?.totalDistanceKm || 0} <span className="text-sm font-normal text-slate-400">km</span>
               </p>
-              <p className="text-[11px] text-slate-400 mt-1">Total route span</p>
+              <p className="text-[11px] text-slate-500 mt-1">Total route span</p>
             </div>
 
             {/* Total Estimated Fuel Cost */}
-            <div className="p-5 rounded-2xl bg-navy-900 border border-navy-700/80 shadow-md text-left">
+            <div className="p-4 sm:p-5 rounded-2xl bg-navy-900 border border-navy-700/80 shadow-md text-left">
               <span className="text-xs text-slate-400 flex items-center gap-1.5 mb-2">
                 <IndianRupee className="w-4 h-4 text-amber-400" />
-                Est. Fuel Budget
+                Fuel Budget
               </span>
               <p className="text-2xl sm:text-3xl font-extrabold text-amber-400">
                 ₹{stats?.totalFuelCostInr || 0}
               </p>
-              <p className="text-[11px] text-slate-400 mt-1">Across all solutions</p>
+              <p className="text-[11px] text-slate-500 mt-1">Calculated expense</p>
+            </div>
+
+            {/* Carbon Emissions (CO2) */}
+            <div className="p-4 sm:p-5 rounded-2xl bg-navy-900 border border-navy-700/80 shadow-md text-left">
+              <span className="text-xs text-slate-400 flex items-center gap-1.5 mb-2">
+                <Leaf className="w-4 h-4 text-teal-400" />
+                Carbon (CO₂)
+              </span>
+              <p className="text-2xl sm:text-3xl font-extrabold text-teal-300">
+                {estTotalCO2} <span className="text-sm font-normal text-slate-400">kg</span>
+              </p>
+              <p className="text-[11px] text-slate-500 mt-1">Estimated emissions</p>
             </div>
 
             {/* Average Duration */}
-            <div className="p-5 rounded-2xl bg-navy-900 border border-navy-700/80 shadow-md text-left">
+            <div className="p-4 sm:p-5 rounded-2xl bg-navy-900 border border-navy-700/80 shadow-md text-left col-span-2 lg:col-span-1">
               <span className="text-xs text-slate-400 flex items-center gap-1.5 mb-2">
                 <Clock className="w-4 h-4 text-indigo-400" />
-                Avg. Trip Time
+                Avg. Trip
               </span>
               <p className="text-2xl sm:text-3xl font-extrabold text-white">
                 {stats?.avgTripDurationMins || 0} <span className="text-sm font-normal text-slate-400">min</span>
               </p>
-              <p className="text-[11px] text-slate-400 mt-1">Mean driving duration</p>
+              <p className="text-[11px] text-slate-500 mt-1">Mean driving duration</p>
             </div>
-
           </div>
         )}
       </div>
+
+      {/* Live DBMS Relational Query Inspector (Evaluator Showcase) */}
+      <DBMSQueryInspector />
 
       {/* Two Columns: Recent Searches + Vehicle Economics Card */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
@@ -191,7 +212,7 @@ export default function Dashboard() {
           <div className="flex items-center justify-between pb-3 border-b border-navy-800">
             <div className="flex items-center gap-2">
               <Fuel className="w-4 h-4 text-emerald-400" />
-              <h3 className="font-bold text-sm text-white">Vehicle Profile</h3>
+              <h3 className="font-bold text-sm text-white">Vehicle Specifications</h3>
             </div>
             <Link to="/settings" className="text-xs text-emerald-400 hover:text-emerald-300 font-semibold">
               Edit

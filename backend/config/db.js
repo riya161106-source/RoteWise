@@ -279,8 +279,32 @@ function executeFallbackQuery(sql, params = []) {
       return [[{ ...s, routes: routeList }]];
     }
 
-    // 1g. Aggregate queries for dashboard stats
-    if (lower.includes('from search_history sh') || lower.includes('count(distinct sh.search_id)') || lower.includes('count(search_id)')) {
+    // 1g. Multi-Table JOIN query
+    if (lower.includes('join routes r') || lower.includes('inner join routes')) {
+      const userId = Number(params[0]);
+      const userSearches = fallbackData.search_history.filter(s => s.user_id === userId);
+      const joinedRows = [];
+      userSearches.forEach(sh => {
+        const matchingRoutes = fallbackData.routes.filter(r => r.search_id === sh.search_id);
+        matchingRoutes.forEach(r => {
+          joinedRows.push({
+            search_id: sh.search_id,
+            source: sh.source,
+            destination: sh.destination,
+            search_date: sh.search_date,
+            route_name: r.route_name,
+            distance: r.distance,
+            duration: r.duration,
+            estimated_fuel_cost: r.estimated_fuel_cost,
+            route_type: r.route_type
+          });
+        });
+      });
+      return [joinedRows];
+    }
+
+    // 1h. Aggregate queries for dashboard stats
+    if (lower.includes('count(distinct') || lower.includes('count(') || lower.includes('sum(')) {
       const userId = Number(params[0]);
       const userSearches = fallbackData.search_history.filter(s => s.user_id === userId);
       const searchIds = new Set(userSearches.map(s => s.search_id));
